@@ -41,44 +41,24 @@ def make_shop_list():
 a = make_shop_list()
 print(a)
 
-def count_lines(file, chunk_size=1<<13):
-    with open(file) as file:
-        return sum(chunk.count('\n')
-                   for chunk in iter(lambda: file.read(chunk_size), ''))
+import os
 
-ten = count_lines('1.txt')
-twenty = count_lines('2.txt')
-thurty = count_lines('3.txt')
+def compile_files(files_list):
+    data = {}
+    for file in files_list:
+        with open(file, encoding="utf-8") as f:
+            file_data = f.readlines()
+            data[len(file_data)] = (file, " ".join(file_data))
 
-one = open('1.txt')
-two = open('2.txt')
-three = open('3.txt')
+    data = dict(sorted(data.items()))
 
-first = one.read
-second = two.read
-thurd = three.read
+    with open("result_data.txt", "w", encoding="utf-8") as new_file:
+        for key, value in data.items():
+            new_file.write(f"{value[0]} \n")
+            new_file.write(f"{key} \n")
+            new_file.write(f"{value[1]} \n")
 
-if ten > twenty and ten > thurty and twenty > thurty:
-    print(first)
-    print(second)
-    print(thurd)
-if ten > twenty and ten > thurty and twenty < thurty:
-    print(first)
-    print(thurd)
-    print(second)
-if twenty > ten and ten > thurty and twenty > thurty:
-    print(second)
-    print(first)
-    print(thurd)
-if twenty > ten and ten < thurty and twenty > thurty:
-    print(second)
-    print(thurd)
-    print(first)
-if ten > twenty and ten < thurty and twenty < thurty:
-    print(thurd)
-    print(first)
-    print(second)
-if ten < twenty and ten < thurty and twenty < thurty:
-    print(thurd)
-    print(second)
-    print(first)
+
+files = ["1.txt", "2.txt", "3.txt"]
+files = [os.path.join(os.getcwd(), file) for file in files]
+compile_files(files)
